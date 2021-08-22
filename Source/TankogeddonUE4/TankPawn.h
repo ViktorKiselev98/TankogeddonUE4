@@ -2,13 +2,16 @@
 
 #pragma once
 
+#include "Cannon.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 #include "TankPawn.generated.h"
+
 class UStaticMeshComponent;
 class UCameraComponent;
 class USpringArmComponent;
-
+class ATankPlayerController;
+class ACannon;
 
 UCLASS()
 class TANKOGEDDONUE4_API ATankPawn : public APawn
@@ -18,6 +21,7 @@ class TANKOGEDDONUE4_API ATankPawn : public APawn
 	float TargetRightAxisValue;
 	float CurrentRightAxisValue;
 
+
 public:
 	// Sets default values for this pawn's properties
 	ATankPawn();
@@ -26,6 +30,9 @@ public:
 
 	UFUNCTION()
 		void RotateRight(float AxisValue);
+	UFUNCTION()
+		void Fire();
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -46,6 +53,20 @@ protected:
 		float RotationSpeed = 100;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
 		float InterpolationKey = 0.1f;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret|Speed")
+		float TurretRotationInterpolationKey = 0.5f;
+	UPROPERTY()
+		ATankPlayerController* TankController;
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = "Components")
+		UArrowComponent* CannonSetupPoint;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Turret|Cannon")
+		TSubclassOf<ACannon> CannonClass;
+	UPROPERTY()
+		ACannon* Cannon;
+	
+
+	
 
 	
 	
@@ -55,5 +76,5 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	void SetupCannon();
 };
