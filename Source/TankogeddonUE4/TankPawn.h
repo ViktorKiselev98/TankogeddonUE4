@@ -32,6 +32,8 @@ public:
 		void RotateRight(float AxisValue);
 	UFUNCTION()
 		void Fire();
+	UFUNCTION()
+		void FireSpecial();
 	
 
 protected:

@@ -41,6 +41,26 @@ void ACannon::Fire()
 	GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, this, &ACannon::Reload, 1 / FireRate, false);
 }
 
+void ACannon::FireSpecial()
+{
+	if (!ReadyToFire) 
+	{
+		return;
+	}
+	ReadyToFire = false;
+
+	if (Type == ECannonType::FireProjectile)
+	{
+		GEngine->AddOnScreenDebugMessage(10, 1, FColor::Green, "Fire2 - projectile");
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(10, 1, FColor::Green, "Fire2 - trace");
+	}
+
+	GetWorld()->GetTimerManager().SetTimer(OUT ReloadTimerHandle, this, &ACannon::Reload, 1.f / FireRate, false);
+	
+}
 bool ACannon::IsReadyToFire()
 {
 	return ReadyToFire;
