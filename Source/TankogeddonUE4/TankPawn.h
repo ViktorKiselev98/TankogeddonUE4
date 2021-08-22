@@ -14,6 +14,9 @@ UCLASS()
 class TANKOGEDDONUE4_API ATankPawn : public APawn
 {
 	GENERATED_BODY()
+		float TargetForwardAxisValue;
+	float TargetRightAxisValue;
+	float CurrentRightAxisValue;
 
 public:
 	// Sets default values for this pawn's properties
@@ -22,7 +25,7 @@ public:
 		void MoveForward(float AxisValue);
 
 	UFUNCTION()
-		void MoveRight(float AxisValue);
+		void RotateRight(float AxisValue);
 
 protected:
 	// Called when the game starts or when spawned
@@ -41,9 +44,11 @@ protected:
 		float MoveSpeed = 100;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
 		float RotationSpeed = 100;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement|Speed")
+		float InterpolationKey = 0.1f;
 
-	float TargetForwardAxisValue;
-	float TargetRightAxisValue;
+	
+	
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

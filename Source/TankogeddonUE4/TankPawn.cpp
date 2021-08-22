@@ -38,6 +38,16 @@ void ATankPawn::BeginPlay()
 	
 }
 
+void ATankPawn::MoveForward(float AxisValue)
+{
+	TargetForwardAxisValue = AxisValue;
+}
+
+void ATankPawn::RotateRight(float AxisValue)
+{
+	TargetRightAxisValue = AxisValue;
+}
+
 // Called every frame
 void ATankPawn::Tick(float DeltaTime)
 {
@@ -45,13 +55,31 @@ void ATankPawn::Tick(float DeltaTime)
 
 	FVector currentLocation = GetActorLocation();
 	FVector ForwardVector = GetActorForwardVector();
-	FVector RightVector = GetActorRightVector();
-	FVector MovePosition = currentLocation + (ForwardVector * TargetForwardAxisValue + RightVector * TargetRightAxisValue) * MoveSpeed * DeltaTime;
+	FVector MovePosition = currentLocation + ForwardVector * MoveSpeed * TargetForwardAxisValue * DeltaTime;
 	SetActorLocation(MovePosition, true);
+	float yawRotation = RotationSpeed * TargetRightAxisValue * DeltaTime;
+	FRotator currentRotation = GetActorRotation();
+	yawRotation = currentRotation.Yaw + yawRotation;
+	FRotator newRotation = FRotator(0, yawRotation, 0);
+	SetActorRotation(newRotation);
+	CurrentRightAxisValue = FMath::Lerp(CurrentRightAxisValue, TargetRightAxisValue, InterpolationKey);
 
+	UE_LOG(LogTemp, Warning, TEXT("CurrentRightAxisValue = %f TargetRightAxisValue = %f"), CurrentRightAxisValue, TargetRightAxisValue);
+	
 
+	yawRotation = currentRotation.Yaw + yawRotation;
 
+	
+	SetActorRotation(newRotation);
+	
 }
+
+
+
+
+
+
+
 
 // Called to bind functionality to input
 void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -60,12 +88,5 @@ void ATankPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
-void ATankPawn::MoveForward(float AxisValue)
-{
-	TargetForwardAxisValue = AxisValue;
-}
 
-void ATankPawn::MoveRight(float AxisValue)
-{
-	TargetRightAxisValue = AxisValue;
-}
+
